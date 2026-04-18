@@ -17,15 +17,15 @@ const SortableTable = <T extends object>({
 	sortOrder
 }: SortableTableProps<T>) => {
 	return (
-		<div className='overflow-auto w-full h-auto rounded-md border  border-sky-200 border-r-0 text-sm'>
+		<div className='overflow-auto w-full h-auto rounded-md border  border-lime-200 border-r-0 text-sm'>
 			<table className={`w-full text-center`}>
-				<thead className='border-b font-medium  border-sky-20 bg-slate-200'>
+				<thead className='border-b font-medium  border-lime-20 bg-black-200'>
 					<tr>
 						{/* <TableHead text='SL' /> */}
 						{columns.map(item => (
 							<th
 								key={String(item.key)}
-								className={`border-r px-3 py-4 border-sky-200 whitespace-nowrap
+								className={`border-r px-3 py-4 border-lime-200 whitespace-nowrap
 									${item.key === 'image' ? 'cursor-text' : 'cursor-pointer'}`}
 								onClick={() =>
 									item.key !== 'image' ? handleSort(item.key) : null
@@ -55,7 +55,7 @@ interface TableHeadProps {
 
 const TableHead = ({ children, text }: TableHeadProps) => {
 	return (
-		<th className='border-r px-2 py-4 border-sky-200'>
+		<th className='border-r px-2 py-4 border-lime-200'>
 			{text ?? children}
 		</th>
 	);

@@ -18,7 +18,7 @@ const ProductTableBody = ({ tableData }: ProductTableBodyProps) => {
 					tableData.map((item, index) => (
 						<tr
 							key={item.id}
-							className='border border-sky-200 border-l-0 border-r-0 border-b-0 hover:bg-sky-50 shadow odd:bg-slate-100/90'
+							className='border border-lime-200 border-l-0 border-r-0 border-b-0 hover:bg-lime-700 shadow odd:bg-black-100/90'
 						>
 							<TableCell {...{ text: index + 1 }} />
 							<TableCell {...{ text: item.name }} />
@@ -89,7 +89,7 @@ const ProductTableBody = ({ tableData }: ProductTableBodyProps) => {
 						</tr>
 					))
 				) : (
-					<tr className='border border-sky-200 border-r border-l-0 border-t-0 border-b-0'>
+					<tr className='border border-lime-200 border-r border-l-0 border-t-0 border-b-0'>
 						<td
 							colSpan={12}
 							className='text-center py-4 text-red-700 text-xl font-semibold'
