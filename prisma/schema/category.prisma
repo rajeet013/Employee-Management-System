@@ -1,0 +1,10 @@
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String?  @default("test-slug") // Add a default value
+  featured    Boolean  @default(false)
+  description String?
+  products    Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

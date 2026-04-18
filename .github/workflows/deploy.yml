@@ -1,0 +1,59 @@
+name: 🚀 Deploy Ariimpex
+
+on:
+  push:
+    branches:
+      - main # Change to your specific branch
+      # - deployprod  # Additional branch for deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check Node.js version
+        run: node -v
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Deploy to ZettaByte Server
+        env:
+          HOST: 213.190.4.162
+          USERNAME: joy
+          TARGET_DIR: /var/www/ariimpex
+          APP_NAME: ariimpex #should match the name of the server block
+          PORT: 3013
+
+        run: |
+          ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
+            export PATH=/home/joy/.nvm/versions/node/v20.14.0/bin:$PATH #'which pm2' command on terminal will give the right path
+            cd $TARGET_DIR
+            git reset --hard origin/${GITHUB_REF#refs/heads/}
+            git pull origin ${GITHUB_REF#refs/heads/}
+            echo "Pulled repo"
+            pnpm install
+            pnpm prisma generate
+            echo "Prisma Generated"
+            Remove the .next folder before the build
+            rm -rf .next
+            echo ".next folder removed"
+            pnpm run build
+            if pm2 list | grep -q $APP_NAME; then
+              echo "Restarting application: $APP_NAME"
+              pm2 restart $APP_NAME
+            else
+              echo "Starting application: $APP_NAME"
+              pm2 start pnpm --name $APP_NAME -- start -- --port=$PORT
+            fi
+            pm2 save
+          EOF

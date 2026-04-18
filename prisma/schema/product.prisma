@@ -1,0 +1,45 @@
+model Product {
+  id          String        @id @default(uuid()) @map("_id")
+  name        String        @unique
+  slug        String?       @unique
+  featured    Boolean       @default(false)
+  description String?
+  price       Float
+  productType ProductType   @default(CUSTOM)
+  status      ProductStatus @default(ACTIVE)
+
+  inStock   Boolean @default(true)
+  inventory Int?    @default(1)
+
+  categoryId String
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  ProductImage ProductImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([slug])
+}
+
+enum ProductType {
+  READY
+  CUSTOM
+}
+
+enum ProductStatus {
+  ACTIVE
+  HIDDEN
+  DISCONTINUED
+}
+
+model ProductImage {
+  id        String  @id @default(uuid()) @map("_id")
+  public_id String
+  image_url String
+  altText   String?
+
+  productId String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
